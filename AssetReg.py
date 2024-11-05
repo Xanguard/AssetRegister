@@ -1,3 +1,4 @@
+#GITTEST#
 # Import OS Type.
 from os import system, name
 
