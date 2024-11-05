@@ -1,9 +1,13 @@
-#GITTEST#
 # Import OS Type.
 from os import system, name
 
 # Define time for sleep function.
 from time import sleep
+
+# Get current date and define current date and format. 
+import datetime
+current_date = datetime.datetime.now()
+formatted_date = current_date.strftime('%d/%m/%Y')
 
 class constants:
 # Minimum character integers.
@@ -77,11 +81,13 @@ class msg:
 
 # Definition of the list.  
 class asset:
-    def __init__(self, name, blue_badge, description, location):
+    def __init__(self, name, blue_badge, description, location, date_added):
         self.name = name
         self.blue_badge = blue_badge
         self.description = description
         self.location = location
+        self.date_added = date_added
+
 
 # Asset Register List.  
 class asset_register:
@@ -91,13 +97,13 @@ class asset_register:
     def write_to_file(self, filename):
         with open(filename, 'w') as f:
             for asset in self.assets:
-                f.write(f"{asset.name},{asset.blue_badge},{asset.description},{asset.location}\n")
+                f.write(f"{asset.name},{asset.blue_badge},{asset.description},{asset.location},{asset.date_added}\n")
 
     def read_from_file(self, filename):
         with open(filename, 'r') as f:
             for line in f:
-                name, blue_badge, description, location = line.strip().split(',')
-                amend_asset = asset(name, blue_badge, description, location)
+                name, blue_badge, description, location,date_added = line.strip().split(',')
+                amend_asset = asset(name, blue_badge, description, location,date_added)
                 self.assets.append(amend_asset)
 
     # Add Asset to the Asset register.
@@ -145,7 +151,7 @@ class asset_register:
                 msg.print_location_length_error()
             else:
                 break
-        amend_asset = asset(name, blue_badge, description, location)
+        amend_asset = asset(name, blue_badge, description, location, formatted_date)
         self.assets.append(amend_asset)
         print("------------------------")
         print("Asset added successfully!")
@@ -251,6 +257,7 @@ class asset_register:
                 print(f"Blue Badge Number: {asset.blue_badge}")
                 print(f"Description:       {asset.description}")
                 print(f"Location:          {asset.location}")
+                print(f"Date Added         {asset.date_added}")
                 print("------------------------")
             input("Press Enter to continue...")
             util.clear()
@@ -269,6 +276,7 @@ class asset_register:
                 print(f"Blue Badge Number: {asset.blue_badge}")
                 print(f"Description:       {asset.description}")
                 print(f"Location:          {asset.location}")
+                print(f"Date Added         {asset.date_added}")
             print("------------------------")
             input("Press Enter to continue...")
             util.clear()
