@@ -5,12 +5,12 @@ class  constraits:
 
 
 class util:
+    # Import OS Type
+    import os
+    
     # Define time for sleep function.
     from time import sleep
-
-    # Import OS Type
-    from os import system, name
-
+    
     # Get current date and define current date and format. 
     import datetime
     current_date = datetime.datetime.now()
@@ -23,12 +23,12 @@ class util:
     def delete_line():
         print("\x1b[1A\x1b[2K", end="")
 
-    # clear function, with validation of which os
+    # clear function, with validation of which os.
     def clear():
-        if util.name == 'nt':
-            _ = util.system('cls')
+        if util.os.name == 'nt':
+            _ = util.os.system('cls')
         else:
-            _ = util.system('clear')
+            _ = util.os.system('clear')
 
 class msg:
     def print_general_error_message(message):
@@ -257,7 +257,7 @@ class asset_register:
                 print(f"Blue Badge Number: {asset.blue_badge}")
                 print(f"Description:       {asset.description}")
                 print(f"Location:          {asset.location}")
-                print(f"Date Added         {asset.date_added}")
+                print(f"Date Added:        {asset.date_added}")
                 print("------------------------")
             input("Press Enter to continue...")
             util.clear()
@@ -276,7 +276,7 @@ class asset_register:
                 print(f"Blue Badge Number: {asset.blue_badge}")
                 print(f"Description:       {asset.description}")
                 print(f"Location:          {asset.location}")
-                print(f"Date Added         {asset.date_added}")
+                print(f"Date Added:        {asset.date_added}")
             print("------------------------")
             input("Press Enter to continue...")
             util.clear()
