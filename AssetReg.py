@@ -1,21 +1,21 @@
-# Import OS Type.
-from os import system, name
-
-# Define time for sleep function.
-from time import sleep
-
-# Get current date and define current date and format. 
-import datetime
-current_date = datetime.datetime.now()
-formatted_date = current_date.strftime('%d/%m/%Y')
-
-class constants:
+class  constraits:
 # Minimum character integers.
     min_char_length = int(2)
     blue_badge_length = int(6)
 
 
-class util:   
+class util:
+    # Define time for sleep function.
+    from time import sleep
+
+    # Import OS Type
+    from os import system, name
+
+    # Get current date and define current date and format. 
+    import datetime
+    current_date = datetime.datetime.now()
+    formatted_date = current_date.strftime('%d/%m/%Y')
+    
     # ANSI escape squence to remove lines in console. Used in "Add Asset" function to remove the past lines 1 by 1 back to the previous prompt.
     # "\xb" is the escape character in ASCII, which is used to introduce an ANSI escape sequence.
     # "[1A" is an escape sequence in ASCII, which moves the cursor on the terminal up 1 line. The "1" signifies how far, the "A" signifies the direction. 
@@ -23,12 +23,12 @@ class util:
     def delete_line():
         print("\x1b[1A\x1b[2K", end="")
 
-    # clear function
+    # clear function, with validation of which os
     def clear():
-        if name == 'nt':
-            _ = system('cls')
+        if util.name == 'nt':
+            _ = util.system('cls')
         else:
-            _ = system('clear')
+            _ = util.system('clear')
 
 class msg:
     def print_general_error_message(message):
@@ -115,7 +115,7 @@ class asset_register:
             if name == "^":
                 util.clear()
                 return
-            elif len(name) <= constants.min_char_length:
+            elif len(name) <=  constraits.min_char_length:
                 msg.print_asset_name_length_error()
             else:
                 break    
@@ -125,7 +125,7 @@ class asset_register:
             if blue_badge == "^":
                 util.clear()
                 return
-            elif len(blue_badge) != constants.blue_badge_length:
+            elif len(blue_badge) !=  constraits.blue_badge_length:
                 msg.print_blue_badge_length_error()
             elif blue_badge.isnumeric() == False:
                 msg.print_blue_badge_numerical_error()
@@ -138,7 +138,7 @@ class asset_register:
             if description == "^":
                 util.clear()
                 return
-            elif len(description) <= constants.min_char_length:
+            elif len(description) <=  constraits.min_char_length:
                 msg.print_description_length_error()
             else:
                 break
@@ -147,11 +147,11 @@ class asset_register:
             if location == "^":
                 util.clear()
                 return
-            elif len(location) <= constants.min_char_length:
+            elif len(location) <=  constraits.min_char_length:
                 msg.print_location_length_error()
             else:
                 break
-        amend_asset = asset(name, blue_badge, description, location, formatted_date)
+        amend_asset = asset(name, blue_badge, description, location, util.formatted_date)
         self.assets.append(amend_asset)
         print("------------------------")
         print("Asset added successfully!")
@@ -200,7 +200,7 @@ class asset_register:
                     while True:
                         util.clear()
                         asset.name = input("Enter new asset name: ")
-                        if len(asset.name) <= constants.min_char_length:
+                        if len(asset.name) <=  constraits.min_char_length:
                             msg.print_asset_name_length_error()
                         else:
                             break
@@ -214,7 +214,7 @@ class asset_register:
                     while True:
                         util.clear()
                         asset.description = input("Enter amended asset description: ")
-                        if len(asset.description) <= constants.min_char_length:
+                        if len(asset.description) <=  constraits.min_char_length:
                             msg.print_description_length_error()
                         else:
                             break  
@@ -228,7 +228,7 @@ class asset_register:
                     while True:
                         util.clear()
                         asset.location = input("Enter amended asset location: ")
-                        if len(asset.location) <= constants.min_char_length:
+                        if len(asset.location) <=  constraits.min_char_length:
                             msg.print_location_length_error()
                         else:
                             break
