@@ -3,7 +3,6 @@ class  constraits:
     min_char_length = int(2)
     blue_badge_length = int(6)
 
-
 class util:
     # Import OS Type
     import os
@@ -31,6 +30,7 @@ class util:
             _ = util.os.system('clear')
 
 class msg:
+    # General error message without delete lines, clears the screen the displays the message then clears the screen again.
     def print_general_error_message(message):
         util.clear()
         print("------------------------")
@@ -48,6 +48,7 @@ class msg:
     def print_search_assets_error():
         msg.print_general_error_message("No assets found!")   
 
+    #Used in displaying the asset validation error message. When enter is pressed, the error message is cleared by the delete line utility.  
     def print_error_asset_message(message):
         print("------------------------")
         print(message)
@@ -59,6 +60,7 @@ class msg:
         util.delete_line()
         util.delete_line()
         if message == ("Invalid choice. Please try again."):
+            util.delete_line()
             util.delete_line()
             util.delete_line()
             util.delete_line()
@@ -96,7 +98,6 @@ class asset:
         self.description = description
         self.location = location
         self.date_added = date_added
-
 
 # Asset Register List.  
 class asset_register:
@@ -146,7 +147,8 @@ class asset_register:
             print("Select asset type:")
             print("1. Workstation")
             print("2. Laptop")
-            print("3. Periferal")
+            print("3. Mobile")
+            print("4. Periferal")
             asset_type_selection = input("Select Asset Type: ")
             if asset_type_selection == "^":
                 util.clear()
@@ -158,6 +160,9 @@ class asset_register:
                 device_type = "Laptop"
                 break
             elif asset_type_selection == "3":
+                device_type = "Mobile"
+                break
+            elif asset_type_selection == "4":
                 device_type = "Periferal"
                 break
             else:
@@ -212,68 +217,119 @@ class asset_register:
         blue_badge = input("Enter asset blue badge number: ")
         for asset in self.assets:
             if asset.blue_badge == blue_badge:
-                util.clear()
-                print("Asset Update Menu for: "+blue_badge)
-                print("------------------------")
-                print("Current Details:")
-                print(f"Name:        {asset.name}")
-                print(f"Description: {asset.description}")
-                print(f"Location:    {asset.location}")
-                print("------------------------")
-                print("1. Update Name")
-                print("2. Update Description")
-                print("3. Update Location")
-                print("------------------------")
-                choice = input("Enter your choice: ")
-                if choice == "1":
-                    while True:
+                while True:
+                    util.clear()
+                    print("Asset Update Menu for: "+blue_badge)
+                    print("------------------------")
+                    print("Current Details:")
+                    print(f"Name:        {asset.name}")
+                    print(f"Device Type: {asset.device_type}")
+                    print(f"Description: {asset.description}")
+                    print(f"Location:    {asset.location}")
+                    print("------------------------")
+                    print("1. Update Name")
+                    print("2. Update Device Type")
+                    print("3. Update Description")
+                    print("4. Update Location")
+                    print("5. Exit Update Menu")
+                    print("------------------------")
+                    
+                    choice = input("Enter your choice: ")
+                    
+                    if choice == "1":
+                        while True:
+                            util.clear()
+                            asset.name = input("Enter new asset name: ")
+                            if len(asset.name) <=  constraits.min_char_length:
+                                msg.print_asset_name_length_error()
+                            else:
+                                break
                         util.clear()
-                        asset.name = input("Enter new asset name: ")
-                        if len(asset.name) <=  constraits.min_char_length:
-                            msg.print_asset_name_length_error()
-                        else:
-                            break
-                    util.clear()
-                    print("------------------------")
-                    print("Name updated for asset number " + asset.blue_badge)
-                    print("------------------------")
-                    input("Press Enter to continue...")
-                    util.clear()     
-                elif choice == "2":
-                    while True:
+                        print("------------------------")
+                        print("Name updated for asset number " + asset.blue_badge + ".")
+                        print("------------------------")
+                        input("Press Enter to continue...")
                         util.clear()
-                        asset.description = input("Enter amended asset description: ")
-                        if len(asset.description) <=  constraits.min_char_length:
-                            msg.print_description_length_error()
-                        else:
-                            break  
-                    util.clear()
-                    print("------------------------")
-                    print("Description updated for asset number " + asset.blue_badge)
-                    print("------------------------")   
-                    input("Press Enter to continue...")
-                    util.clear()
-                elif choice == "3":
-                    while True:
+                        pass                  
+                    elif choice == "2":
+                        while True:
+                            print("Select asset type:")
+                            print("1. Workstation")
+                            print("2. Laptop")
+                            print("3. Mobile")
+                            print("4. Periferal")
+                            asset_type_selection = input("Select Asset Type: ")
+                            if asset_type_selection == "^":
+                                util.clear()
+                                return
+                            elif asset_type_selection == "1":
+                                asset.device_type = "Workstation"
+                                break
+                            elif asset_type_selection == "2":
+                                asset.device_type = "Laptop"
+                                break
+                            elif asset_type_selection == "3":
+                                asset.device_type = "Mobile"
+                                break
+                            elif asset_type_selection == "4":
+                                asset.device_type = "Periferal"
+                                break
+                            else:
+                                msg.print_asset_invalid_choice_error()   
                         util.clear()
-                        asset.location = input("Enter amended asset location: ")
-                        if len(asset.location) <=  constraits.min_char_length:
-                            msg.print_location_length_error()
-                        else:
-                            break
-                    util.clear()
-                    print("------------------------")
-                    print("Location updated for asset number " + asset.blue_badge)
-                    print("------------------------")
-                    input("Press Enter to continue...")
-                    util.clear()
-                else:
-                    msg.print_invalid_choice_error()
+                        print("------------------------")
+                        print("Device type updated for asset number " + asset.blue_badge)
+                        print("------------------------")
+                        input("Press Enter to continue...")
+                        util.clear()
+                        pass
+                    elif choice == "3":
+                        while True:
+                            util.clear()
+                            asset.description = input("Enter amended asset description: ")
+                            if len(asset.description) <=  constraits.min_char_length:
+                                msg.print_description_length_error()
+                            else:
+                                break  
+                        util.clear()
+                        print("------------------------")
+                        print("Description updated for asset number " + asset.blue_badge)
+                        print("------------------------")   
+                        input("Press Enter to continue...")
+                        util.clear()
+                        pass
+                    elif choice == "4":
+                        while True:
+                            util.clear()
+                            asset.location = input("Enter amended asset location: ")
+                            if len(asset.location) <=  constraits.min_char_length:
+                                msg.print_location_length_error()
+                            else:
+                                break
+                        util.clear()
+                        print("------------------------")
+                        print("Location updated for asset number " + asset.blue_badge)
+                        print("------------------------")
+                        input("Press Enter to continue...")
+                        util.clear()
+                        pass
+                    elif choice == "5":
+                    # Exit the update menu loop
+                        util.clear() 
+                        print("------------------------")
+                        print("Exiting update menu for asset " + blue_badge + ".")
+                        print("------------------------")
+                        input("Press Enter to continue...")
+                        util.clear()
+                        break
+                    else:
+                        msg.print_invalid_choice_error()
+                break
+            else:
+                msg.print_search_assets_error()
                 return
-        else:
-            msg.print_search_assets_error()
-            return
-        
+
+                
     # Display all assets in register.
     def display_assets(self):
         util.clear()
