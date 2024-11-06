@@ -8,7 +8,7 @@ class util:
     # Import OS Type
     import os
     
-    # Define time for sleep function.
+    # Define time for sleep function
     from time import sleep
     
     # Get current date and define current date and format. 
@@ -58,15 +58,23 @@ class msg:
         util.delete_line()
         util.delete_line()
         util.delete_line()
-
+        if message == ("Invalid choice. Please try again."):
+            util.delete_line()
+            util.delete_line()
+            util.delete_line()
+            util.delete_line()
+            
     # msg to print specific error msg
     def print_asset_name_length_error():
         msg.print_error_asset_message("Asset Name too short, must be atleast 3 characters long.")
 
+    def print_asset_invalid_choice_error():
+        msg.print_error_asset_message("Invalid choice. Please try again.")
+
     def print_blue_badge_length_error():
         msg.print_error_asset_message("Blue Badge Number must be exactly 6 digits long.")
 
-    def print_blue_badge_numerical_error():
+    def print_blue_badge_numerical_err1or():
         msg.print_error_asset_message("Blue Badge Number should be numerical.")
 
     def print_blue_badge_duplicate_error():
@@ -81,9 +89,10 @@ class msg:
 
 # Definition of the list.  
 class asset:
-    def __init__(self, name, blue_badge, description, location, date_added):
+    def __init__(self, name, blue_badge, device_type, description, location, date_added):
         self.name = name
         self.blue_badge = blue_badge
+        self.device_type = device_type
         self.description = description
         self.location = location
         self.date_added = date_added
@@ -97,13 +106,13 @@ class asset_register:
     def write_to_file(self, filename):
         with open(filename, 'w') as f:
             for asset in self.assets:
-                f.write(f"{asset.name},{asset.blue_badge},{asset.description},{asset.location},{asset.date_added}\n")
+                f.write(f"{asset.name},{asset.blue_badge},{asset.device_type},{asset.description},{asset.location},{asset.date_added}\n")
 
     def read_from_file(self, filename):
         with open(filename, 'r') as f:
             for line in f:
-                name, blue_badge, description, location,date_added = line.strip().split(',')
-                amend_asset = asset(name, blue_badge, description, location,date_added)
+                name, blue_badge, device_type, description, location,date_added = line.strip().split(',')
+                amend_asset = asset(name, blue_badge, device_type, description, location,date_added)
                 self.assets.append(amend_asset)
 
     # Add Asset to the Asset register.
@@ -134,6 +143,26 @@ class asset_register:
             else:
                 msg.print_blue_badge_duplicate_error()
         while True:
+            print("Select asset type:")
+            print("1. Workstation")
+            print("2. Laptop")
+            print("3. Periferal")
+            asset_type_selection = input("Select Asset Type: ")
+            if asset_type_selection == "^":
+                util.clear()
+                return
+            elif asset_type_selection == "1":
+                device_type = "Workstation"
+                break
+            elif asset_type_selection == "2":
+                device_type = "Laptop"
+                break
+            elif asset_type_selection == "3":
+                device_type = "Periferal"
+                break
+            else:
+                msg.print_asset_invalid_choice_error()        
+        while True:
             description = input("Enter asset description: ")
             if description == "^":
                 util.clear()
@@ -151,7 +180,7 @@ class asset_register:
                 msg.print_location_length_error()
             else:
                 break
-        amend_asset = asset(name, blue_badge, description, location, util.formatted_date)
+        amend_asset = asset(name, blue_badge, device_type, description, location, util.formatted_date)
         self.assets.append(amend_asset)
         print("------------------------")
         print("Asset added successfully!")
@@ -255,6 +284,7 @@ class asset_register:
                 print("------------------------")
                 print(f"Name:              {asset.name}")
                 print(f"Blue Badge Number: {asset.blue_badge}")
+                print(f"Asset Type:        {asset.device_type}")
                 print(f"Description:       {asset.description}")
                 print(f"Location:          {asset.location}")
                 print(f"Date Added:        {asset.date_added}")
@@ -274,6 +304,7 @@ class asset_register:
                 print("------------------------")
                 print(f"Name:              {asset.name}")
                 print(f"Blue Badge Number: {asset.blue_badge}")
+                print(f"Asset Type:        {asset.device_type}")
                 print(f"Description:       {asset.description}")
                 print(f"Location:          {asset.location}")
                 print(f"Date Added:        {asset.date_added}")

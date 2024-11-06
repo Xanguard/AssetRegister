@@ -1,4 +1,2 @@
-Rick,777777,Nick,Office 1,05/10/2024
-Carl,999999,Carl,Carl,05/10/2024
-Optiplex 5040,011287,Desktop PC,IT Office,05/11/2024
-Thinkcentre M715q,012735,Desktop PC,IT Office,05/11/2024
+Optiplex 5040,011287,Workstation,Desktop PC,IT Office,05/11/2024
+Thinkcentre M715q,012735,Workstation,Desktop PC,IT Office,05/11/2024
