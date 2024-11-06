@@ -236,9 +236,15 @@ class asset_register:
                     
                     choice = input("Enter your choice: ")
                     
+                    #Update Menu - Name
                     if choice == "1":
-                        while True:
-                            util.clear()
+                        util.clear()
+                        print("Asset Name Update Menu for: "+blue_badge)
+                        print("------------------------")
+                        print("Current Details:")
+                        print(f"Name:        {asset.name}")
+                        print("------------------------")
+                        while True:    
                             asset.name = input("Enter new asset name: ")
                             if len(asset.name) <=  constraits.min_char_length:
                                 msg.print_asset_name_length_error()
@@ -251,9 +257,17 @@ class asset_register:
                         input("Press Enter to continue...")
                         util.clear()
                         pass                  
+            
+                    #Update Menu - Type
                     elif choice == "2":
+                        util.clear()
+                        print("Device Type Update Menu for: "+blue_badge)
+                        print("------------------------")
+                        print("Current Details:")
+                        print(f"Device Type: {asset.device_type}")
+                        print("------------------------")
                         while True:
-                            print("Select asset type:")
+                            print("Select a new asset type:")
                             print("1. Workstation")
                             print("2. Laptop")
                             print("3. Mobile")
@@ -283,10 +297,17 @@ class asset_register:
                         input("Press Enter to continue...")
                         util.clear()
                         pass
+                    
+                    #Update Menu - Description
                     elif choice == "3":
+                        util.clear()
+                        print("Description Update Menu for: "+blue_badge)
+                        print("------------------------")
+                        print("Current Details:")
+                        print(f"Description: {asset.description}")
+                        print("------------------------")
                         while True:
-                            util.clear()
-                            asset.description = input("Enter amended asset description: ")
+                            asset.description = input("Enter amended description: ")
                             if len(asset.description) <=  constraits.min_char_length:
                                 msg.print_description_length_error()
                             else:
@@ -298,9 +319,16 @@ class asset_register:
                         input("Press Enter to continue...")
                         util.clear()
                         pass
+                
+                    #Update Menu - Location
                     elif choice == "4":
+                        util.clear()
+                        print("Asset Location Update Menu for: "+blue_badge)
+                        print("------------------------")
+                        print("Current Details:")
+                        print(f"Location: {asset.location}")
+                        print("------------------------")
                         while True:
-                            util.clear()
                             asset.location = input("Enter amended asset location: ")
                             if len(asset.location) <=  constraits.min_char_length:
                                 msg.print_location_length_error()
@@ -313,8 +341,9 @@ class asset_register:
                         input("Press Enter to continue...")
                         util.clear()
                         pass
+                    
+                    # Update Menu - Exit 
                     elif choice == "5":
-                    # Exit the update menu loop
                         util.clear() 
                         print("------------------------")
                         print("Exiting update menu for asset " + blue_badge + ".")

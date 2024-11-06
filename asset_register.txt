@@ -1,3 +1,3 @@
- Optiplex 5040,011287,Workstation,Desktop PC,IT Office,05/11/2024
+Optiplex 5040,011287,Workstation,Specimen Urgents Bench,Chemistry,05/11/2024
 Thinkcentre M715q,012735,Workstation,Desktop PC,IT Office,05/11/2024
 Optiplex 7020,113311,Workstation,Desktop PC,IT Office,06/11/2024
