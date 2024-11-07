@@ -91,12 +91,13 @@ class msg:
 
 # Definition of the list.  
 class asset:
-    def __init__(self, name, blue_badge, device_type, description, location, date_added):
+    def __init__(self, name, blue_badge, device_type, description, location, notes, date_added):
         self.name = name
         self.blue_badge = blue_badge
         self.device_type = device_type
         self.description = description
         self.location = location
+        self.notes = notes
         self.date_added = date_added
 
 # Asset Register List.  
@@ -107,13 +108,13 @@ class asset_register:
     def write_to_file(self, filename):
         with open(filename, 'w') as f:
             for asset in self.assets:
-                f.write(f"{asset.name},{asset.blue_badge},{asset.device_type},{asset.description},{asset.location},{asset.date_added}\n")
+                f.write(f"{asset.name},{asset.blue_badge},{asset.device_type},{asset.description},{asset.location},{asset.notes},{asset.date_added}\n")
 
     def read_from_file(self, filename):
         with open(filename, 'r') as f:
             for line in f:
-                name, blue_badge, device_type, description, location,date_added = line.strip().split(',')
-                amend_asset = asset(name, blue_badge, device_type, description, location,date_added)
+                name, blue_badge, device_type, description, location, notes, date_added = line.strip().split(',')
+                amend_asset = asset(name, blue_badge, device_type, description, location,notes,date_added)
                 self.assets.append(amend_asset)
 
     # Add Asset to the Asset register.
@@ -185,7 +186,14 @@ class asset_register:
                 msg.print_location_length_error()
             else:
                 break
-        amend_asset = asset(name, blue_badge, device_type, description, location, util.formatted_date)
+        while True:
+            notes = input("Enter any additional information: ")
+            if notes == "^":
+                util.clear()
+                return
+            else:
+                break
+        amend_asset = asset(name, blue_badge, device_type, description, location, notes, util.formatted_date)
         self.assets.append(amend_asset)
         print("------------------------")
         print("Asset added successfully!")
@@ -249,7 +257,7 @@ class asset_register:
             return
         
         while True:
-            #Update Menu
+            #Update Menu - Main
             for asset in update_asset_search:
                 util.clear()
                 print("Asset Update Menu for: "+blue_badge)
@@ -259,12 +267,14 @@ class asset_register:
                 print(f"Device Type: {asset.device_type}")
                 print(f"Description: {asset.description}")
                 print(f"Location:    {asset.location}")
+                print(f"Notes:       {asset.notes}")
                 print("------------------------")
                 print("1. Update Name")
                 print("2. Update Device Type")
                 print("3. Update Description")
                 print("4. Update Location")
-                print("5. Exit Update Menu")
+                print("5. Update Notes")
+                print("6. Exit Update Menu")
                 print("------------------------")
                 
                 choice = input("Enter your choice: ")
@@ -275,7 +285,7 @@ class asset_register:
                     print("Asset Name Update Menu for: "+blue_badge)
                     print("------------------------")
                     print("Current Details:")
-                    print(f"Name:        {asset.name}")
+                    print(asset.name)
                     print("------------------------")
                     while True:    
                         asset.name = input("Enter new asset name: ")
@@ -297,7 +307,7 @@ class asset_register:
                     print("Device Type Update Menu for: "+blue_badge)
                     print("------------------------")
                     print("Current Details:")
-                    print(f"Device Type: {asset.device_type}")
+                    print(asset.device_type)
                     print("------------------------")
                     while True:
                         print("Select a new asset type:")
@@ -337,7 +347,7 @@ class asset_register:
                     print("Description Update Menu for: "+blue_badge)
                     print("------------------------")
                     print("Current Details:")
-                    print(f"Description: {asset.description}")
+                    print(asset.description)
                     print("------------------------")
                     while True:
                         asset.description = input("Enter amended description: ")
@@ -359,7 +369,7 @@ class asset_register:
                     print("Asset Location Update Menu for: "+blue_badge)
                     print("------------------------")
                     print("Current Details:")
-                    print(f"Location: {asset.location}")
+                    print(asset.location)
                     print("------------------------")
                     while True:
                         asset.location = input("Enter amended asset location: ")
@@ -373,10 +383,25 @@ class asset_register:
                     print("------------------------")
                     input("Press Enter to continue...")
                     util.clear()
-                    
-                
+
+                #Update Menu - Notes
+                elif choice =="5":
+                    util.clear()
+                    print("Asset Notes Update Menu for: "+blue_badge)
+                    print("------------------------")
+                    print("Current Details:")
+                    print(asset.notes)
+                    print("------------------------")    
+                    asset.notes = input("Enter any additional information: ")
+                    util.clear()
+                    print("------------------------")
+                    print("Notes updated for asset number " + asset.blue_badge)
+                    print("------------------------")
+                    input("Press Enter to continue...")
+                    util.clear()
+                                
                 # Update Menu - Exit 
-                elif choice == "5":
+                elif choice == "6":
                     util.clear() 
                     print("------------------------")
                     print("Exiting update menu for asset " + blue_badge + ".")
@@ -401,6 +426,7 @@ class asset_register:
                 print(f"Asset Type:        {asset.device_type}")
                 print(f"Description:       {asset.description}")
                 print(f"Location:          {asset.location}")
+                print(f"Notes:             {asset.notes}")
                 print(f"Date Added:        {asset.date_added}")
                 print("------------------------")
             input("Press Enter to continue...")
@@ -421,6 +447,7 @@ class asset_register:
                 print(f"Asset Type:        {asset.device_type}")
                 print(f"Description:       {asset.description}")
                 print(f"Location:          {asset.location}")
+                print(f"Notes:             {asset.notes}")
                 print(f"Date Added:        {asset.date_added}")
             print("------------------------")
             input("Press Enter to continue...")
