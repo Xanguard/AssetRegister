@@ -1,6 +1,10 @@
-class  constraits:
 # Minimum character integers.
+class  constraits:
+
     min_char_length = int(2)
+    # Room numbers are always below 4 characters. For example 16.B is the longest character length. 
+    max_char_room_length = int(5)
+    # Blue Badge numbers are alwasy 6 digits.
     blue_badge_length = int(6)
 
 class util:
@@ -76,7 +80,7 @@ class msg:
     def print_blue_badge_length_error():
         msg.print_error_asset_message("Blue Badge Number must be exactly 6 digits long.")
 
-    def print_blue_badge_numerical_err1or():
+    def print_blue_badge_numerical_error():
         msg.print_error_asset_message("Blue Badge Number should be numerical.")
 
     def print_blue_badge_duplicate_error():
@@ -85,18 +89,21 @@ class msg:
     def print_description_length_error():
         msg.print_error_asset_message("Asset description too short, must be atleast 3 characters long.")
 
-    def print_location_length_error():
-        msg.print_error_asset_message("Asset location too short, must be atleast 3 characters long.")
-       
+    def print_department_length_error():
+        msg.print_error_asset_message("Asset department too short, must be atleast 3 characters long.")
+
+    def print_room_length_error():
+        msg.print_error_asset_message("Asset room number too long, must be below 5 characters long.")   
 
 # Definition of the list.  
 class asset:
-    def __init__(self, name, blue_badge, device_type, description, location, notes, date_added):
+    def __init__(self, name, blue_badge, device_type, description, department, room_number, notes, date_added):
         self.name = name
         self.blue_badge = blue_badge
         self.device_type = device_type
         self.description = description
-        self.location = location
+        self.department = department
+        self.room_number = room_number
         self.notes = notes
         self.date_added = date_added
 
@@ -105,16 +112,18 @@ class asset_register:
     def __init__(self):
         self.assets = []
 
+    # Write to file.
     def write_to_file(self, filename):
         with open(filename, 'w') as f:
             for asset in self.assets:
-                f.write(f"{asset.name},{asset.blue_badge},{asset.device_type},{asset.description},{asset.location},{asset.notes},{asset.date_added}\n")
+                f.write(f"{asset.name},{asset.blue_badge},{asset.device_type},{asset.description},{asset.department},{asset.room_number},{asset.notes},{asset.date_added}\n")
 
+    # Read from file.
     def read_from_file(self, filename):
         with open(filename, 'r') as f:
             for line in f:
-                name, blue_badge, device_type, description, location, notes, date_added = line.strip().split(',')
-                amend_asset = asset(name, blue_badge, device_type, description, location,notes,date_added)
+                name, blue_badge, device_type, description, department, room_number, notes, date_added = line.strip().split(',')
+                amend_asset = asset(name, blue_badge, device_type, description, department, room_number, notes,date_added)
                 self.assets.append(amend_asset)
 
     # Add Asset to the Asset register.
@@ -178,12 +187,21 @@ class asset_register:
             else:
                 break
         while True:
-            location = input("Enter asset location: ")
-            if location == "^":
+            department = input("Enter asset department: ")
+            if department == "^":
                 util.clear()
                 return
-            elif len(location) <=  constraits.min_char_length:
-                msg.print_location_length_error()
+            elif len(department) <=  constraits.min_char_length:
+                msg.print_department_length_error()
+            else:
+                break
+        while True:
+            room_number = input("Enter asset room number: ")
+            if room_number == "^":
+                util.clear()
+                return
+            elif len(room_number) > constraits.max_char_room_length:
+                msg.print_room_length_error()
             else:
                 break
         while True:
@@ -193,7 +211,7 @@ class asset_register:
                 return
             else:
                 break
-        amend_asset = asset(name, blue_badge, device_type, description, location, notes, util.formatted_date)
+        amend_asset = asset(name, blue_badge, device_type, description, department, room_number, notes, util.formatted_date)
         self.assets.append(amend_asset)
         print("------------------------")
         print("Asset added successfully!")
@@ -209,7 +227,7 @@ class asset_register:
         # Searchs for inputted asset.
         remove_asset_search = [asset for asset in self.assets if asset.blue_badge == blue_badge]
         
-        # If asset is not in search then print "Asset not found"
+        # If asset is not in search then print error.
         if not remove_asset_search:
             msg.print_search_assets_error()
             return  
@@ -266,15 +284,17 @@ class asset_register:
                 print(f"Name:        {asset.name}")
                 print(f"Device Type: {asset.device_type}")
                 print(f"Description: {asset.description}")
-                print(f"Location:    {asset.location}")
+                print(f"Department:  {asset.department}")
+                print(f"Room:        {asset.room_number}")
                 print(f"Notes:       {asset.notes}")
                 print("------------------------")
                 print("1. Update Name")
                 print("2. Update Device Type")
                 print("3. Update Description")
-                print("4. Update Location")
-                print("5. Update Notes")
-                print("6. Exit Update Menu")
+                print("4. Update Department")
+                print("5. Update Room Number")
+                print("6. Update Notes")
+                print("7. Exit Update Menu")
                 print("------------------------")
                 
                 choice = input("Enter your choice: ")
@@ -363,29 +383,50 @@ class asset_register:
                     util.clear()
                     
             
-                #Update Menu - Location
+                #Update Menu - Department
                 elif choice == "4":
                     util.clear()
-                    print("Asset Location Update Menu for: "+blue_badge)
+                    print("Asset Department Update Menu for: "+blue_badge)
                     print("------------------------")
                     print("Current Details:")
-                    print(asset.location)
+                    print(asset.department)
                     print("------------------------")
                     while True:
-                        asset.location = input("Enter amended asset location: ")
-                        if len(asset.location) <=  constraits.min_char_length:
-                            msg.print_location_length_error()
+                        asset.department = input("Enter amended asset department: ")
+                        if len(asset.department) <=  constraits.min_char_length:
+                            msg.print_department_length_error()
                         else:
                             break
                     util.clear()
                     print("------------------------")
-                    print("Location updated for asset number " + asset.blue_badge)
+                    print("Department updated for asset number " + asset.blue_badge)
+                    print("------------------------")
+                    input("Press Enter to continue...")
+                    util.clear()
+                
+                #Update Menu - Room
+                elif choice == "5":
+                    util.clear()
+                    print("Asset Room Update Menu for: "+blue_badge)
+                    print("------------------------")
+                    print("Current Details:")
+                    print(asset.room_number)
+                    print("------------------------")
+                    while True:
+                        asset.room_number = input("Enter asset room number: ")
+                        if len(asset.room_number) > constraits.max_char_room_length:
+                            msg.print_room_length_error()
+                        else:
+                            break
+                    util.clear()
+                    print("------------------------")
+                    print("Room updated for asset number " + blue_badge)
                     print("------------------------")
                     input("Press Enter to continue...")
                     util.clear()
 
                 #Update Menu - Notes
-                elif choice =="5":
+                elif choice =="6":
                     util.clear()
                     print("Asset Notes Update Menu for: "+blue_badge)
                     print("------------------------")
@@ -395,13 +436,13 @@ class asset_register:
                     asset.notes = input("Enter any additional information: ")
                     util.clear()
                     print("------------------------")
-                    print("Notes updated for asset number " + asset.blue_badge)
+                    print("Notes updated for asset number " +blue_badge)
                     print("------------------------")
                     input("Press Enter to continue...")
                     util.clear()
                                 
                 # Update Menu - Exit 
-                elif choice == "6":
+                elif choice == "7":
                     util.clear() 
                     print("------------------------")
                     print("Exiting update menu for asset " + blue_badge + ".")
@@ -425,7 +466,8 @@ class asset_register:
                 print(f"Blue Badge Number: {asset.blue_badge}")
                 print(f"Asset Type:        {asset.device_type}")
                 print(f"Description:       {asset.description}")
-                print(f"Location:          {asset.location}")
+                print(f"Department:        {asset.department}")
+                print(f"Room Number:       {asset.room_number}")
                 print(f"Notes:             {asset.notes}")
                 print(f"Date Added:        {asset.date_added}")
                 print("------------------------")
@@ -446,7 +488,8 @@ class asset_register:
                 print(f"Blue Badge Number: {asset.blue_badge}")
                 print(f"Asset Type:        {asset.device_type}")
                 print(f"Description:       {asset.description}")
-                print(f"Location:          {asset.location}")
+                print(f"Department:        {asset.department}")
+                print(f"Room Number:       {asset.room_number}")
                 print(f"Notes:             {asset.notes}")
                 print(f"Date Added:        {asset.date_added}")
             print("------------------------")
