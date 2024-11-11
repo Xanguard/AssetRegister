@@ -34,6 +34,18 @@ class util:
             _ = util.os.system('clear')
 
 class msg:
+    def update_cancelled():
+        util.clear()
+        print("------------------------")
+        print(f"Update process cancelled.")
+        print("------------------------")
+        input("Press Enter to continue...")
+        util.clear()
+    
+    def caret_exit():
+        print("Type '^' to exit at any point.")
+        print("-------------------------")
+    
     # General error message without delete lines, clears the screen the displays the message then clears the screen again.
     def print_general_error_message(message):
         util.clear()
@@ -129,7 +141,8 @@ class asset_register:
     # Add Asset to the Asset register.
     def add_asset(self):
         util.clear()
-        print("Add Asset Function - Type '^' to exit at any point.")
+        msg.caret_exit()
+        print("Add Asset Function")
         while True:
             name = input("Enter asset name: ")
             if name == "^":
@@ -223,13 +236,17 @@ class asset_register:
     # Remove asset from the asset register.
     def remove_asset(self):
         util.clear()
+        msg.caret_exit()
         print("Remove Asset Function")
         blue_badge = input("Enter asset blue badge number: ")
         # Searchs for inputted asset.
         remove_asset_search = [asset for asset in self.assets if asset.blue_badge == blue_badge]
+        if blue_badge == "^":
+            util.clear()
+            return
         
         # If asset is not in search then print error.
-        if not remove_asset_search:
+        elif not remove_asset_search:
             msg.print_search_assets_error()
             return  
         
@@ -268,10 +285,16 @@ class asset_register:
     # Update asset in the asset register.
     def update_asset(self):
         util.clear()
+        msg.caret_exit()
         print("Update Asset Function")
         blue_badge = input("Enter asset blue badge number: ")
         update_asset_search = [asset for asset in self.assets if asset.blue_badge == blue_badge]
-        if not update_asset_search:
+        
+        if blue_badge == "^":
+            util.clear()
+            return
+        
+        elif not update_asset_search:
             msg.print_search_assets_error()
             return
         
@@ -303,28 +326,41 @@ class asset_register:
                 #Update Menu - Name
                 if choice == "1":
                     util.clear()
+                    msg.caret_exit()
                     print(f"Asset Name Update Menu for: {blue_badge}")
                     print("------------------------")
                     print("Current Details:")
                     print(asset.name)
                     print("------------------------")
                     while True:    
-                        asset.name = input("Enter new asset name: ")
-                        if len(asset.name) <=  constraits.min_char_length:
+                        updated_asset_name = input("Enter new asset name: ")
+                        if updated_asset_name == "^":
+                            util.clear()
+                            msg.update_cancelled()
+                            break
+                        elif len(updated_asset_name) <=  constraits.min_char_length:
                             msg.print_asset_name_length_error()
                         else:
-                            break
-                    util.clear()
-                    print("------------------------")
-                    print(f"Name updated for asset number {asset.blue_badge}")
-                    print("------------------------")
-                    input("Press Enter to continue...")
-                    util.clear()
-                                      
+                            asset.name = updated_asset_name
+                            util.clear()
+                            print("------------------------")
+                            print(f"Name updated for asset number {asset.blue_badge}")
+                            print("------------------------")
+                            input("Press Enter to continue...")
+                            util.clear()
+                            break          
         
                 #Update Menu - Type
                 elif choice == "2":
+                    def updated_periferal(): 
+                        util.clear()
+                        print("------------------------")
+                        print(f"Device type updated for asset number {asset.blue_badge}")
+                        print("------------------------")
+                        input("Press Enter to continue...")
+                        util.clear()
                     util.clear()
+                    msg.caret_exit()
                     print(f"Device Type Update Menu for: {blue_badge}")
                     print("------------------------")
                     print("Current Details:")
@@ -339,109 +375,133 @@ class asset_register:
                         asset_type_selection = input("Select Asset Type: ")
                         if asset_type_selection == "^":
                             util.clear()
-                            return
+                            msg.update_cancelled()
+                            break
                         elif asset_type_selection == "1":
                             asset.device_type = "Workstation"
+                            updated_periferal()
                             break
                         elif asset_type_selection == "2":
                             asset.device_type = "Laptop"
+                            updated_periferal()
                             break
                         elif asset_type_selection == "3":
+                            updated_periferal()
                             asset.device_type = "Mobile"
                             break
                         elif asset_type_selection == "4":
+                            updated_periferal()
                             asset.device_type = "Periferal"
                             break
                         else:
                             msg.print_asset_invalid_choice_error()   
-                    util.clear()
-                    print("------------------------")
-                    print(f"Device type updated for asset number {asset.blue_badge}")
-                    print("------------------------")
-                    input("Press Enter to continue...")
-                    util.clear()
                     
-                
                 #Update Menu - Description
                 elif choice == "3":
                     util.clear()
+                    msg.caret_exit()
                     print(f"Description Update Menu for: {blue_badge}")
                     print("------------------------")
                     print("Current Details:")
                     print(asset.description)
                     print("------------------------")
                     while True:
-                        asset.description = input("Enter amended description: ")
-                        if len(asset.description) <=  constraits.min_char_length:
+                        updated_asset_description = input("Enter amended description: ")
+                        if updated_asset_description == "^":
+                            util.clear()
+                            msg.update_cancelled()
+                            break
+                        elif len(updated_asset_description) <=  constraits.min_char_length:
                             msg.print_description_length_error()
                         else:
-                            break  
-                    util.clear()
-                    print("------------------------")
-                    print(f"Description updated for asset number {asset.blue_badge}")
-                    print("------------------------")   
-                    input("Press Enter to continue...")
-                    util.clear()
+                            asset.description = updated_asset_description
+                            util.clear()
+                            print("------------------------")
+                            print(f"Description updated for asset number {asset.blue_badge}")
+                            print("------------------------")   
+                            input("Press Enter to continue...")
+                            util.clear()
+                            break
                     
             
                 #Update Menu - Department
                 elif choice == "4":
                     util.clear()
+                    msg.caret_exit()
                     print(f"Asset Department Update Menu for: {blue_badge}")
                     print("------------------------")
                     print("Current Details:")
                     print(asset.department)
                     print("------------------------")
                     while True:
-                        asset.department = input("Enter amended asset department: ")
-                        if len(asset.department) <=  constraits.min_char_length:
+                        updated_asset_department = input("Enter amended asset department: ")
+                        if updated_asset_department == "^":
+                            util.clear()
+                            msg.update_cancelled()
+                            return
+                        elif len(updated_asset_department) <=  constraits.min_char_length:
                             msg.print_department_length_error()
                         else:
+                            asset.department = updated_asset_department
+                            util.clear()
+                            print("------------------------")
+                            print(f"Department updated for asset number {asset.blue_badge}")
+                            print("------------------------")
+                            input("Press Enter to continue...")
+                            util.clear()
                             break
-                    util.clear()
-                    print("------------------------")
-                    print(f"Department updated for asset number {asset.blue_badge}")
-                    print("------------------------")
-                    input("Press Enter to continue...")
-                    util.clear()
                 
                 #Update Menu - Room
                 elif choice == "5":
                     util.clear()
+                    msg.caret_exit()
                     print(f"Asset Room Update Menu for: {blue_badge}")
                     print("------------------------")
                     print("Current Details:")
                     print(asset.room_number)
                     print("------------------------")
                     while True:
-                        asset.room_number = input("Enter asset room number: ")
-                        if len(asset.room_number) > constraits.max_char_room_length:
+                        updated_asset_room_number = input("Enter asset room number: ")
+                        if updated_asset_room_number == "^":
+                            msg.update_cancelled
+                            break
+                        elif len(updated_asset_room_number) > constraits.max_char_room_length:
                             msg.print_room_length_error()
                         else:
+                            asset.room_number = updated_asset_room_number
+                            util.clear()
+                            print("------------------------")
+                            print(f"Room updated for asset number {blue_badge}")
+                            print("------------------------")
+                            input("Press Enter to continue...")
+                            util.clear()
                             break
-                    util.clear()
-                    print("------------------------")
-                    print(f"Room updated for asset number {blue_badge}")
-                    print("------------------------")
-                    input("Press Enter to continue...")
-                    util.clear()
 
                 #Update Menu - Notes
                 elif choice =="6":
                     util.clear()
+                    msg.caret_exit
                     print(f"Asset Notes Update Menu for: {blue_badge}")
                     print("------------------------")
                     print("Current Details:")
                     print(asset.notes)
                     print("------------------------")    
-                    asset.notes = input("Enter any additional information: ")
-                    util.clear()
-                    print("------------------------")
-                    print(f"Notes updated for asset number {blue_badge}")
-                    print("------------------------")
-                    input("Press Enter to continue...")
-                    util.clear()
-                                
+                    while True:
+                        updated_asset_notes = input("Enter any additional information: ")
+                        if updated_asset_notes == "^":
+                            util.clear()
+                            msg.update_cancelled()
+                            return
+                        else:
+                            asset.notes = updated_asset_notes
+                            util.clear()
+                            print("------------------------")
+                            print(f"Notes updated for asset number {blue_badge}")
+                            print("------------------------")
+                            input("Press Enter to continue...")
+                            util.clear()
+                            break
+
                 # Update Menu - Exit 
                 elif choice == "7":
                     util.clear() 
@@ -478,9 +538,13 @@ class asset_register:
     # Search assets and return a specific asset based on the name or blue badge number. 
     def search_assets(self):
         util.clear()
+        msg.caret_exit()
         query = input("Enter search query (name or blue badge number): ")
         results = [asset for asset in self.assets if query.lower() in asset.name.lower() or query in asset.blue_badge]
-        if not results:
+        if query == "^":
+            util.clear()
+            return
+        elif not results:
             msg.print_search_assets_error()
         else:
             for asset in results:
