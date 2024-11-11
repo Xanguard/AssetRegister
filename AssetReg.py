@@ -150,6 +150,7 @@ class asset_register:
             elif blue_badge.isnumeric() == False:
                 msg.print_blue_badge_numerical_error()
             elif not primary_key_validate:
+                blue_badge = int(blue_badge)
                 break
             else:
                 msg.print_blue_badge_duplicate_error()
@@ -235,7 +236,7 @@ class asset_register:
         # If an asset is found then continue with removal menu. 
         util.clear()
         print("------------------------")
-        print(f"Are you sure you would like to delete asset "+ blue_badge + "?")
+        print(f"Are you sure you would like to delete asset {blue_badge}?")
         print("------------------------")
         print("1. Yes")
         print("2. No")
@@ -250,7 +251,7 @@ class asset_register:
             for asset in remove_asset_search:
                 self.assets.remove(asset)
             print("------------------------")
-            print(f"Asset " + blue_badge + " removed successfully!")
+            print(f"Asset {blue_badge} removed successfully!")
             print("------------------------")
             input("Press Enter to continue...")
             util.clear()
@@ -278,7 +279,7 @@ class asset_register:
             #Update Menu - Main
             for asset in update_asset_search:
                 util.clear()
-                print("Asset Update Menu for: "+blue_badge)
+                print(f"Asset Update Menu for: {blue_badge}")
                 print("------------------------")
                 print("Current Details:")
                 print(f"Name:        {asset.name}")
@@ -302,7 +303,7 @@ class asset_register:
                 #Update Menu - Name
                 if choice == "1":
                     util.clear()
-                    print("Asset Name Update Menu for: "+blue_badge)
+                    print(f"Asset Name Update Menu for: {blue_badge}")
                     print("------------------------")
                     print("Current Details:")
                     print(asset.name)
@@ -315,7 +316,7 @@ class asset_register:
                             break
                     util.clear()
                     print("------------------------")
-                    print("Name updated for asset number " + asset.blue_badge + ".")
+                    print(f"Name updated for asset number {asset.blue_badge}")
                     print("------------------------")
                     input("Press Enter to continue...")
                     util.clear()
@@ -324,7 +325,7 @@ class asset_register:
                 #Update Menu - Type
                 elif choice == "2":
                     util.clear()
-                    print("Device Type Update Menu for: "+blue_badge)
+                    print(f"Device Type Update Menu for: {blue_badge}")
                     print("------------------------")
                     print("Current Details:")
                     print(asset.device_type)
@@ -355,7 +356,7 @@ class asset_register:
                             msg.print_asset_invalid_choice_error()   
                     util.clear()
                     print("------------------------")
-                    print("Device type updated for asset number " + asset.blue_badge)
+                    print(f"Device type updated for asset number {asset.blue_badge}")
                     print("------------------------")
                     input("Press Enter to continue...")
                     util.clear()
@@ -364,7 +365,7 @@ class asset_register:
                 #Update Menu - Description
                 elif choice == "3":
                     util.clear()
-                    print("Description Update Menu for: "+blue_badge)
+                    print(f"Description Update Menu for: {blue_badge}")
                     print("------------------------")
                     print("Current Details:")
                     print(asset.description)
@@ -377,7 +378,7 @@ class asset_register:
                             break  
                     util.clear()
                     print("------------------------")
-                    print("Description updated for asset number " + asset.blue_badge)
+                    print(f"Description updated for asset number {asset.blue_badge}")
                     print("------------------------")   
                     input("Press Enter to continue...")
                     util.clear()
@@ -386,7 +387,7 @@ class asset_register:
                 #Update Menu - Department
                 elif choice == "4":
                     util.clear()
-                    print("Asset Department Update Menu for: "+blue_badge)
+                    print(f"Asset Department Update Menu for: {blue_badge}")
                     print("------------------------")
                     print("Current Details:")
                     print(asset.department)
@@ -399,7 +400,7 @@ class asset_register:
                             break
                     util.clear()
                     print("------------------------")
-                    print("Department updated for asset number " + asset.blue_badge)
+                    print(f"Department updated for asset number {asset.blue_badge}")
                     print("------------------------")
                     input("Press Enter to continue...")
                     util.clear()
@@ -407,7 +408,7 @@ class asset_register:
                 #Update Menu - Room
                 elif choice == "5":
                     util.clear()
-                    print("Asset Room Update Menu for: "+blue_badge)
+                    print(f"Asset Room Update Menu for: {blue_badge}")
                     print("------------------------")
                     print("Current Details:")
                     print(asset.room_number)
@@ -420,7 +421,7 @@ class asset_register:
                             break
                     util.clear()
                     print("------------------------")
-                    print("Room updated for asset number " + blue_badge)
+                    print(f"Room updated for asset number {blue_badge}")
                     print("------------------------")
                     input("Press Enter to continue...")
                     util.clear()
@@ -428,7 +429,7 @@ class asset_register:
                 #Update Menu - Notes
                 elif choice =="6":
                     util.clear()
-                    print("Asset Notes Update Menu for: "+blue_badge)
+                    print(f"Asset Notes Update Menu for: {blue_badge}")
                     print("------------------------")
                     print("Current Details:")
                     print(asset.notes)
@@ -436,7 +437,7 @@ class asset_register:
                     asset.notes = input("Enter any additional information: ")
                     util.clear()
                     print("------------------------")
-                    print("Notes updated for asset number " +blue_badge)
+                    print(f"Notes updated for asset number {blue_badge}")
                     print("------------------------")
                     input("Press Enter to continue...")
                     util.clear()
@@ -445,7 +446,7 @@ class asset_register:
                 elif choice == "7":
                     util.clear() 
                     print("------------------------")
-                    print("Exiting update menu for asset " + blue_badge + ".")
+                    print(f"Exiting update menu for asset {blue_badge}")
                     print("------------------------")
                     input("Press Enter to continue...")
                     util.clear()
