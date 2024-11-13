@@ -123,20 +123,72 @@ class asset:
 class asset_register:
     def __init__(self):
         self.assets = []
+        self.errors = []  # List to collect error messages
+        self.errored_assets = []  # List to keep track of errored assets
 
-    # Write to file.
+    # Validation constraints are checked to validate import data.
+    def validate_asset_data(self, name, blue_badge, device_type, description, department, room_number, notes, date_added):
+        valid = True
+        if len(name) < constraits.min_char_length:
+            self.errors.append(f"Asset {blue_badge} - Asset Name too short, must be at least 3 characters long.")
+            valid = False
+        if len(blue_badge) != constraits.blue_badge_length or not blue_badge.isdigit():
+            self.errors.append(f"Asset {blue_badge} - Blue Badge Number must be exactly 6 digits long and numerical.")
+            valid = False
+        if device_type not in ["Workstation", "Laptop", "Mobile", "Periferal"]:
+            self.errors.append(f"Asset {blue_badge} - Invalid asset type.")
+            valid = False
+        if len(description) < constraits.min_char_length:
+            self.errors.append(f"Asset {blue_badge} - Asset description too short, must be at least 3 characters long.")
+            valid = False
+        if len(department) < constraits.min_char_length:
+            self.errors.append(f"Asset {blue_badge} - Asset department too short, must be at least 3 characters long.")
+            valid = False
+        if len(room_number) > constraits.max_char_room_length:
+            self.errors.append(f"Asset {blue_badge} - Asset room number too long, must be below 5 characters long.")
+            valid = False
+        if len(date_added) != 10:
+            self.errors.append(f"Asset {blue_badge} - Date Added has an invalid format.")
+            valid = False
+        return valid
+
     def write_to_file(self, filename):
         with open(filename, 'w') as f:
             for asset in self.assets:
                 f.write(f"{asset.name},{asset.blue_badge},{asset.device_type},{asset.description},{asset.department},{asset.room_number},{asset.notes},{asset.date_added}\n")
+            # Optionally save errored assets as well
+            for errored_asset in self.errored_assets:
+                f.write(f"{errored_asset['line']}\n")
 
     # Read from file.
     def read_from_file(self, filename):
         with open(filename, 'r') as f:
             for line in f:
                 name, blue_badge, device_type, description, department, room_number, notes, date_added = line.strip().split(',')
-                amend_asset = asset(name, blue_badge, device_type, description, department, room_number, notes,date_added)
-                self.assets.append(amend_asset)
+                if self.validate_asset_data(name, blue_badge, device_type, description, department, room_number, notes, date_added):
+                    amend_asset = asset(name, blue_badge, device_type, description, department, room_number, notes, date_added)
+                    self.assets.append(amend_asset)
+                else:
+                    self.errored_assets.append({
+                        "line": line.strip(),
+                        "name": name,
+                        "blue_badge": blue_badge,
+                        "device_type": device_type,
+                        "description": description,
+                        "department": department,
+                        "room_number": room_number,
+                        "notes": notes,
+                        "date_added": date_added
+                    })  # Store the errored asset details
+                    
+                    
+                    print("------------------------")
+                    print(f"Import Error - Skipping invalid asset data: {blue_badge}")
+                    print("------------------------")
+                    input("Press Enter to continue...")
+                    util.clear()
+                
+
 
     # Add Asset to the Asset register.
     def add_asset(self):
@@ -535,6 +587,19 @@ class asset_register:
             input("Press Enter to continue...")
             util.clear()
 
+    def display_errors(self):
+        util.clear()
+        if not self.errors:
+            print("No errors found.")
+        else:
+            print("------------------------")
+            print("Validation Errors - Please correct errors in input file for the following assets:")
+            for error in self.errors:
+                print(error)
+            print("------------------------")
+        input("Press Enter to continue...")
+        util.clear()
+
     # Search assets and return a specific asset based on the name or blue badge number. 
     def search_assets(self):
         util.clear()
@@ -606,12 +671,15 @@ class asset_register:
             util.clear()
             print("------------------------")
             print("1. Remove all assets")
-            print("2. Exit Admin")
+            print("2. Error Log")
+            print("3. Exit Admin")
             print("------------------------")
             choice = input("Enter your choice: ")
             if choice == "1":
                 self.admin_all_remove()
             elif choice == "2":
+                self.display_errors()
+            elif choice == "3":
                 util.clear()
                 return
             else:
@@ -630,7 +698,8 @@ def main():
         print("3. Update Asset")
         print("4. Display Assets")
         print("5. Search Assets")
-        print("6. Save & Exit")
+        print("6. Display Errors")
+        print("7. Save & Exit")
         print("------------------------")
         choice = input("Enter your choice: ")
         if choice =="":
@@ -646,6 +715,8 @@ def main():
         elif choice == "5":
             reg.search_assets()
         elif choice == "6":
+            reg.display_errors()
+        elif choice == "7":
             reg.write_to_file('asset_register.txt')  # write to asset_register file on exit
             util.clear()
             print("Successfully exited")
