@@ -3,7 +3,7 @@ class  constraits:
 
     min_char_length = int(2)
     # Room numbers are always below 4 characters. For example 16.B is the longest character length. 
-    max_char_room_length = int(5)
+    max_char_room_length = int(4)
     # Blue Badge numbers are alwasy 6 digits.
     blue_badge_length = int(6)
 
@@ -123,20 +123,53 @@ class asset:
 class asset_register:
     def __init__(self):
         self.assets = []
+        self.load_initial_assets()
 
-    # Write to file.
-    def write_to_file(self, filename):
-        with open(filename, 'w') as f:
-            for asset in self.assets:
-                f.write(f"{asset.name},{asset.blue_badge},{asset.device_type},{asset.description},{asset.department},{asset.room_number},{asset.notes},{asset.date_added}\n")
+    def is_valid_asset(self, asset_data):
+        name, blue_badge, device_type, description, department, room_number, notes, date_added = asset_data
+        errors = []
 
-    # Read from file.
-    def read_from_file(self, filename):
-        with open(filename, 'r') as f:
-            for line in f:
-                name, blue_badge, device_type, description, department, room_number, notes, date_added = line.strip().split(',')
-                amend_asset = asset(name, blue_badge, device_type, description, department, room_number, notes,date_added)
-                self.assets.append(amend_asset)
+        # Validate each field according to your constraints.
+        if len(name) < constraits.min_char_length:
+            errors.append("Asset name is too short.")
+        if len(blue_badge) != constraits.blue_badge_length or not blue_badge.isdigit():
+            errors.append("Blue badge number must be exactly 6 digits long and numeric.")
+        if len(device_type) < constraits.min_char_length:
+            errors.append("Device type is too short.")
+        if len(description) < constraits.min_char_length:
+            errors.append("Description is too short.")
+        if len(department) < constraits.min_char_length:
+            errors.append("Department is too short.")
+        if len(room_number) > constraits.max_char_room_length:
+            errors.append("Room number is too long.")
+        if len(date_added) != 10:  # Simple check for date format, which is 10 digits long. 
+            errors.append("Date added must be in the format dd/mm/yyyy.")
+
+        return errors
+
+    def load_initial_assets(self):
+        hardcoded_assets = [
+            ("Optiplex 5040", "01187", "Workstation", "Desktop PC", "Chemistry", "56", "", "05/11/2024"),
+            ("Thinkcentre M715q", "012735", "Workstation", "Desktop PC", "Path IT", "38656", "In Repair", "05/11/2024"),
+            ("Optiplex 7020", "013311", "Workstation", "Desktop PC", "Path IT", "38", "", "11/2024"),
+            ("Thinkcentre 24\" Screen", "017963", "Periferal", "Desktop Screen", "Transfusion", "16", "", "07/11/2024"),
+            ("Dell Precision 3450", "027631", "Workstation", "Digital Pathology PC", "Histology", "53", "Sectra Software installed", "11/11/2024"),
+            ("Phillips Speechmike 4", "005623", "Periferal", "Digital Pathology Speechmike", "Histology", "53", "", "12/11/2024"),
+            ("Barco MDPC-8127", "028770", "Periferal", "Digital Pathology Screen", "Histology", "53", "Barco Graphics Card Required", "11/11/2024"),
+            ("Toshiba Dynabook Satellite Pro", "014312", "Laptop", "Technical Head Laptop", "Biochemistry", "25", "", "01/11/2024"),
+            ("Thinkpad L15 Gen 1", "009852", "Laptop", "Projector Laptop", "Path IT", "38", "Laptop to be kept with projector", "09/09/2024"),
+            ("Lenovo ThinkPad L580", "008793", "Laptop", "Anticoagulation Laptop", "Haematology", "16.B", "VPN Needed for Clinics", "01/06/2024"),
+        ]
+
+        for asset_data in hardcoded_assets:
+            errors = self.is_valid_asset(asset_data)
+            if not errors:
+                new_asset = asset(*asset_data)
+                self.assets.append(new_asset)
+            else:
+                print(f"Skipping invalid asset data: {asset_data}")
+                for error in errors:
+                    print(f"  - {error}")
 
     # Add Asset to the Asset register.
     def add_asset(self):
@@ -621,7 +654,6 @@ class asset_register:
 def main():
     util.clear()
     reg = asset_register()
-    reg.read_from_file('asset_register.txt')  # Read from file at startup
     while True:
         print("------------------------")
         print("Asset Register Menu:")
@@ -646,7 +678,6 @@ def main():
         elif choice == "5":
             reg.search_assets()
         elif choice == "6":
-            reg.write_to_file('asset_register.txt')  # write to asset_register file on exit
             util.clear()
             print("Successfully exited")
             break
