@@ -149,9 +149,9 @@ class asset_register:
 
     def load_initial_assets(self):
         hardcoded_assets = [
-            ("Optiplex 5040", "01187", "Workstation", "Desktop PC", "Chemistry", "56", "", "05/11/2024"),
-            ("Thinkcentre M715q", "012735", "Workstation", "Desktop PC", "Path IT", "38656", "In Repair", "05/11/2024"),
-            ("Optiplex 7020", "013311", "Workstation", "Desktop PC", "Path IT", "38", "", "11/2024"),
+            ("Optiplex 5040", "001187", "Workstation", "Desktop PC", "Chemistry", "56", "", "05/11/2024"),
+            ("Thinkcentre M715q", "012735", "Workstation", "Desktop PC", "Path IT", "3", "In Repair", "05/11/2024"),
+            ("Optiplex 7020", "013311", "Workstation", "Desktop PC", "Path IT", "38", "", "01/11/2024"),
             ("Thinkcentre 24\" Screen", "017963", "Periferal", "Desktop Screen", "Transfusion", "16", "", "07/11/2024"),
             ("Dell Precision 3450", "027631", "Workstation", "Digital Pathology PC", "Histology", "53", "Sectra Software installed", "11/11/2024"),
             ("Phillips Speechmike 4", "005623", "Periferal", "Digital Pathology Speechmike", "Histology", "53", "", "12/11/2024"),
