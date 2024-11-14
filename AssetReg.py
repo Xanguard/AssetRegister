@@ -215,7 +215,6 @@ class asset_register:
             elif blue_badge.isnumeric() == False:
                 msg.print_blue_badge_numerical_error()
             elif not primary_key_validate:
-                blue_badge = int(blue_badge)
                 break
             else:
                 msg.print_blue_badge_duplicate_error()
@@ -317,6 +316,7 @@ class asset_register:
         
         if delete_confirmation == "1":
             util.clear()
+            
             for asset in remove_asset_search:
                 self.assets.remove(asset)
             print("------------------------")
