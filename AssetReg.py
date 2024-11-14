@@ -174,10 +174,10 @@ class asset_manager:
     
 class asset_register:    
     def __init__(self):
-        self.asset_manager = asset_manager()  # Create an instance of AssetManager
-        self.assets = self.asset_manager.assets  # Use the assets from AssetManager
-        self.errors = self.asset_manager.errors  # Use the errors from AssetManager
-        self.errored_assets = self.asset_manager.errored_assets  # Use the errored assets from AssetManager
+        self.asset_manager = asset_manager()  # Create an instance of asset_manager
+        self.assets = self.asset_manager.assets  # Use the assets from asset_manager
+        self.errors = self.asset_manager.errors  # Use the errors from asset_manager
+        self.errored_assets = self.asset_manager.errored_assets  # Use the errored assets from asset_manager
 
         util.clear()
         blue_badge_numbers = [asset.blue_badge for asset in self.assets]
@@ -210,7 +210,7 @@ class asset_register:
                 break    
         while True:
             blue_badge = input("Enter asset blue badge number: ")
-            primary_key_validate = [asset for asset in self.assets if blue_badge in asset.blue_badge]
+            primary_key_validate = [asset for asset in self.assets if asset.blue_badge == blue_badge]
             if blue_badge == "^":
                 util.clear()
                 return
@@ -219,7 +219,6 @@ class asset_register:
             elif blue_badge.isnumeric() == False:
                 msg.print_blue_badge_numerical_error()
             elif not primary_key_validate:
-                blue_badge = int(blue_badge)
                 break
             else:
                 msg.print_blue_badge_duplicate_error()
@@ -609,7 +608,7 @@ class asset_register:
         util.clear()
         msg.caret_exit()
         query = input("Enter search query (name or blue badge number): ")
-        results = [asset for asset in self.assets if query.lower() in asset.name.lower() or query in asset.blue_badge]
+        results = [asset for asset in self.assets if query.lower() in asset.name.lower() or query == asset.blue_badge]
         if query == "^":
             util.clear()
             return

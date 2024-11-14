@@ -11,6 +11,7 @@ def asset_reg():
 def test_add_asset(asset_reg):
     asset_reg.assets.clear()   
     inputs = [
+
         'Test Asset',       # Asset name
         '123456',           # Blue badge
         '2',                # Device type (Laptop)
