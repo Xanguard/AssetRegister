@@ -1,12 +1,3 @@
-# Minimum character integers.
-class  constraits:
-
-    min_char_length = int(2)
-    # Room numbers are always below 4 characters. For example 16.B is the longest character length. 
-    max_char_room_length = int(4)
-    # Blue Badge numbers are alwasy 6 digits.
-    blue_badge_length = int(6)
-
 class util:
     # Import OS Type
     import os
@@ -16,6 +7,7 @@ class util:
     
     # Get current date and define current date and format. 
     import datetime
+
     current_date = datetime.datetime.now()
     formatted_date = current_date.strftime('%d/%m/%Y')
     
@@ -33,8 +25,19 @@ class util:
         else:
             _ = util.os.system('clear')
 
+# Minimum character integers.
+class  constraits:
+    min_char_length = int(2)
+    # Room numbers are always below 4 characters. For example 16.B is the longest character length. 
+    max_char_room_length = int(4)
+    # Blue Badge numbers are alwasy 6 digits.
+    blue_badge_length = int(6)
+
 class msg:
-    # Exiting updating a asset. 
+    def caret_exit():
+        print("Type '^' to exit at any point.")
+        print("-------------------------")
+
     def update_cancelled():
         util.clear()
         print("------------------------")
@@ -43,10 +46,23 @@ class msg:
         input("Press Enter to continue...")
         util.clear()
     
-    # 
-    def caret_exit():
-        print("Type '^' to exit at any point.")
-        print("-------------------------")
+    #Used in displaying the asset validation error message. When enter is pressed, the error message is cleared by the delete line utility.  
+    def print_error_asset_message(message):
+        print("------------------------")
+        print(message)
+        print("------------------------")
+        input("Press Enter to continue...")
+        util.delete_line()
+        util.delete_line()
+        util.delete_line()
+        util.delete_line()
+        util.delete_line()
+        if message == ("Invalid choice. Please try again."):
+            util.delete_line()
+            util.delete_line()
+            util.delete_line()
+            util.delete_line()
+            util.delete_line()
     
     # General error message without delete lines, clears the screen the displays the message then clears the screen again.
     def print_general_error_message(message):
@@ -65,26 +81,7 @@ class msg:
 
     def print_search_assets_error():
         msg.print_general_error_message("No assets found!")   
-
-    #Used in displaying the asset validation error message. When enter is pressed, the error message is cleared by the delete line utility.  
-    def print_error_asset_message(message):
-        print("------------------------")
-        print(message)
-        print("------------------------")
-        input("Press Enter to continue...")
-        util.delete_line()
-        util.delete_line()
-        util.delete_line()
-        util.delete_line()
-        util.delete_line()
-        if message == ("Invalid choice. Please try again."):
-            util.delete_line()
-            util.delete_line()
-            util.delete_line()
-            util.delete_line()
-            util.delete_line()
-            
-    # msg to print specific error msg
+        
     def print_asset_name_length_error():
         msg.print_error_asset_message("Asset Name too short, must be atleast 3 characters long.")
 
@@ -122,18 +119,18 @@ class asset:
         self.date_added = date_added
 
 # Asset Register import and functions.
-class asset_register:    
+class asset_manager:  
     def __init__(self):
-        self.hardcoded_assets = [   ("Optiplex 5040", "001187", "Workstation", "Desktop PC", "Chemistry", "56", "", "05/11/2024"),
+        self.hardcoded_assets = [   ("Optiplex 5040", "00118", "Workstation", "Desktop PC", "Chemistry", "56", "", "05/11/2024"),
                                     ("Thinkcentre M715q", "012735", "Workstation", "Desktop PC", "Path IT", "3", "In Repair", "05/11/2024"),
                                     ("Optiplex 7020", "013311", "Workstation", "Desktop PC", "Path IT", "38", "", "01/11/2024"),
-                                    ("Thinkcentre 24\" Screen", "017963", "Periferal", "Desktop Screen", "Transfusion", "16", "", "07/11/2024"),
+                                    ("Thinkcentre 24\" Screen", "017963", "Periferal", "Desktop Screen", "Transfusion", "16", "", "07/1/2024"),
                                     ("Dell Precision 3450", "027631", "Workstation", "Digital Pathology PC", "Histology", "53", "Sectra Software installed", "11/11/2024"),
                                     ("Phillips Speechmike 4", "005623", "Periferal", "Digital Pathology Speechmike", "Histology", "53", "", "12/11/2024"),
                                     ("Barco MDPC-8127", "028770", "Periferal", "Digital Pathology Screen", "Histology", "53", "Barco Graphics Card Required", "11/11/2024"),
                                     ("Toshiba Dynabook Satellite Pro", "014312", "Laptop", "Technical Head Laptop", "Biochemistry", "25", "", "01/11/2024"),
                                     ("Thinkpad L15 Gen 1", "009852", "Laptop", "Projector Laptop", "Path IT", "38", "Laptop to be kept with projector", "09/09/2024"),
-                                    ("Lenovo ThinkPad L580", "008793", "Laptop", "Anticoagulation Laptop", "Haematology", "16.B", "VPN Needed for Clinics", "01/06/2024"),
+                                    ("Lenovo ThinkPad L580", "008793", "Laptop", "Anticoagulation Laptop", "Haematology", "16666", "VPN Needed for Clinics", "01/06/2024"),
                                 ]
         self.assets = []    # List of generated assets.
         self.errors = []    # List to collect interium error messages.
@@ -144,20 +141,12 @@ class asset_register:
                 amend_asset = asset(name, blue_badge, device_type, description, department, room_number, notes, date_added)
                 self.assets.append(amend_asset)
             else:
-                self.errored_assets.append({
-                    "name": name,
-                    "blue_badge": blue_badge,
-                    "device_type": device_type,
-                    "description": description,
-                    "department": department,
-                    "room_number": room_number,
-                    "notes": notes,
-                    "date_added": date_added
-                })  # Store the errored asset details to errored assets list, allowing this to be called later. 
-
-        print(f"Total Assets Imported: {len(self.assets)}")     # Upon showing the Menu, shows how successful the improt was. 
-        print(f"Errors Encountered: {len(self.errors)}")
+                amend_asset = asset(name, blue_badge, device_type, description, department, room_number, notes, date_added)
+                self.errored_assets.append(amend_asset)
+             # Store the errored asset details to errored assets list, allowing this to be called later. 
     
+        util.clear()
+
     def validate_asset_data(self, name, blue_badge, device_type, description, department, room_number, notes, date_added):
         valid = True
         if len(name) < constraits.min_char_length:
@@ -182,7 +171,29 @@ class asset_register:
             self.errors.append(f"Asset {blue_badge} - Date Added has an invalid format.")
             valid = False
         return valid  
-                    
+    
+class asset_register:    
+    def __init__(self):
+        self.asset_manager = asset_manager()  # Create an instance of AssetManager
+        self.assets = self.asset_manager.assets  # Use the assets from AssetManager
+        self.errors = self.asset_manager.errors  # Use the errors from AssetManager
+        self.errored_assets = self.asset_manager.errored_assets  # Use the errored assets from AssetManager
+
+        util.clear()
+        blue_badge_numbers = [asset.blue_badge for asset in self.assets]
+        print(f"Total Assets Imported: {len(self.assets)}")
+        if blue_badge_numbers:
+            print(f"Blue Badge Numbers: {', '.join(blue_badge_numbers)}")
+        else:
+            print("Blue Badge Numbers: N/A")
+        print('-----------------------')
+        blue_badge_numbers_error = [asset.blue_badge for asset in self.errored_assets]
+        print(f"Errors Encountered: {len(self.errored_assets)}")
+        if blue_badge_numbers_error:
+            print(f"Errored Blue Badge Numbers: {', '.join(blue_badge_numbers_error)}")
+        else:
+            print("Errored Blue Badge Numbers: N/A")
+
     # Add Asset to the Asset register.
     def add_asset(self):
         util.clear()
@@ -666,10 +677,10 @@ class asset_register:
             print("1. Remove all assets")
             print("2. Exit Admin")
             print("------------------------")
-            choice = input("Enter your choice: ")
-            if choice == "1":
+            admin_choice = input("Enter your choice: ")
+            if admin_choice == "1":
                 self.admin_all_remove()
-            elif choice == "2":
+            elif admin_choice == "2":
                 util.clear()
                 return
             else:
@@ -690,26 +701,26 @@ def main():
         print("6. Display Errors")
         print("7. Save & Exit")
         print("------------------------")
-        choice = input("Enter your choice: ")
-        if choice =="":
+        menu_choice = input("Enter your choice: ")
+        if menu_choice =="":
             util.clear()
-        elif choice == "1":
+        elif menu_choice == "1":
             reg.add_asset()
-        elif choice == "2":
+        elif menu_choice == "2":
             reg.remove_asset()
-        elif choice == "3":
+        elif menu_choice == "3":
             reg.update_asset()
-        elif choice == "4":
+        elif menu_choice == "4":
             reg.display_assets()
-        elif choice == "5":
+        elif menu_choice == "5":
             reg.search_assets()
-        elif choice == "6":
+        elif menu_choice == "6":
             reg.display_errors()
-        elif choice == "7":
+        elif menu_choice == "7":
             util.clear()
             print("Successfully exited")
             break
-        elif choice == "admin":
+        elif menu_choice == "admin":
             reg.admin()
         else:
             msg.print_invalid_choice_error()
