@@ -34,6 +34,7 @@ class util:
             _ = util.os.system('clear')
 
 class msg:
+    # Exiting updating a asset. 
     def update_cancelled():
         util.clear()
         print("------------------------")
@@ -42,6 +43,7 @@ class msg:
         input("Press Enter to continue...")
         util.clear()
     
+    # 
     def caret_exit():
         print("Type '^' to exit at any point.")
         print("-------------------------")
@@ -107,7 +109,7 @@ class msg:
     def print_room_length_error():
         msg.print_error_asset_message("Asset room number too long, must be below 5 characters long.")   
 
-# Definition of the list.  
+# Defines what an asset is. 
 class asset:
     def __init__(self, name, blue_badge, device_type, description, department, room_number, notes, date_added):
         self.name = name
@@ -119,58 +121,68 @@ class asset:
         self.notes = notes
         self.date_added = date_added
 
-# Asset Register List.  
-class asset_register:
+# Asset Register import and functions.
+class asset_register:    
     def __init__(self):
-        self.assets = []
-        self.load_initial_assets()
-
-    def is_valid_asset(self, asset_data):
-        name, blue_badge, device_type, description, department, room_number, notes, date_added = asset_data
-        errors = []
-
-        # Validate each field according to your constraints.
-        if len(name) < constraits.min_char_length:
-            errors.append("Asset name is too short.")
-        if len(blue_badge) != constraits.blue_badge_length or not blue_badge.isdigit():
-            errors.append("Blue badge number must be exactly 6 digits long and numeric.")
-        if len(device_type) < constraits.min_char_length:
-            errors.append("Device type is too short.")
-        if len(description) < constraits.min_char_length:
-            errors.append("Description is too short.")
-        if len(department) < constraits.min_char_length:
-            errors.append("Department is too short.")
-        if len(room_number) > constraits.max_char_room_length:
-            errors.append("Room number is too long.")
-        if len(date_added) != 10:  # Simple check for date format, which is 10 digits long. 
-            errors.append("Date added must be in the format dd/mm/yyyy.")
-
-        return errors
-
-    def load_initial_assets(self):
-        hardcoded_assets = [
-            ("Optiplex 5040", "001187", "Workstation", "Desktop PC", "Chemistry", "56", "", "05/11/2024"),
-            ("Thinkcentre M715q", "012735", "Workstation", "Desktop PC", "Path IT", "3", "In Repair", "05/11/2024"),
-            ("Optiplex 7020", "013311", "Workstation", "Desktop PC", "Path IT", "38", "", "01/11/2024"),
-            ("Thinkcentre 24\" Screen", "017963", "Periferal", "Desktop Screen", "Transfusion", "16", "", "07/11/2024"),
-            ("Dell Precision 3450", "027631", "Workstation", "Digital Pathology PC", "Histology", "53", "Sectra Software installed", "11/11/2024"),
-            ("Phillips Speechmike 4", "005623", "Periferal", "Digital Pathology Speechmike", "Histology", "53", "", "12/11/2024"),
-            ("Barco MDPC-8127", "028770", "Periferal", "Digital Pathology Screen", "Histology", "53", "Barco Graphics Card Required", "11/11/2024"),
-            ("Toshiba Dynabook Satellite Pro", "014312", "Laptop", "Technical Head Laptop", "Biochemistry", "25", "", "01/11/2024"),
-            ("Thinkpad L15 Gen 1", "009852", "Laptop", "Projector Laptop", "Path IT", "38", "Laptop to be kept with projector", "09/09/2024"),
-            ("Lenovo ThinkPad L580", "008793", "Laptop", "Anticoagulation Laptop", "Haematology", "16.B", "VPN Needed for Clinics", "01/06/2024"),
-        ]
-
-        for asset_data in hardcoded_assets:
-            errors = self.is_valid_asset(asset_data)
-            if not errors:
-                new_asset = asset(*asset_data)
-                self.assets.append(new_asset)
+        self.hardcoded_assets = [   ("Optiplex 5040", "001187", "Workstation", "Desktop PC", "Chemistry", "56", "", "05/11/2024"),
+                                    ("Thinkcentre M715q", "012735", "Workstation", "Desktop PC", "Path IT", "3", "In Repair", "05/11/2024"),
+                                    ("Optiplex 7020", "013311", "Workstation", "Desktop PC", "Path IT", "38", "", "01/11/2024"),
+                                    ("Thinkcentre 24\" Screen", "017963", "Periferal", "Desktop Screen", "Transfusion", "16", "", "07/11/2024"),
+                                    ("Dell Precision 3450", "027631", "Workstation", "Digital Pathology PC", "Histology", "53", "Sectra Software installed", "11/11/2024"),
+                                    ("Phillips Speechmike 4", "005623", "Periferal", "Digital Pathology Speechmike", "Histology", "53", "", "12/11/2024"),
+                                    ("Barco MDPC-8127", "028770", "Periferal", "Digital Pathology Screen", "Histology", "53", "Barco Graphics Card Required", "11/11/2024"),
+                                    ("Toshiba Dynabook Satellite Pro", "014312", "Laptop", "Technical Head Laptop", "Biochemistry", "25", "", "01/11/2024"),
+                                    ("Thinkpad L15 Gen 1", "009852", "Laptop", "Projector Laptop", "Path IT", "38", "Laptop to be kept with projector", "09/09/2024"),
+                                    ("Lenovo ThinkPad L580", "008793", "Laptop", "Anticoagulation Laptop", "Haematology", "16.B", "VPN Needed for Clinics", "01/06/2024"),
+                                ]
+        self.assets = []    # List of generated assets.
+        self.errors = []    # List to collect interium error messages.
+        self.errored_assets = []  # List to keep track of errored assets.
+        for asset_data in self.hardcoded_assets:
+            name, blue_badge, device_type, description, department, room_number, notes, date_added = asset_data
+            if self.validate_asset_data(name, blue_badge, device_type, description, department, room_number, notes, date_added):
+                amend_asset = asset(name, blue_badge, device_type, description, department, room_number, notes, date_added)
+                self.assets.append(amend_asset)
             else:
-                print(f"Skipping invalid asset data: {asset_data}")
-                for error in errors:
-                    print(f"  - {error}")
+                self.errored_assets.append({
+                    "name": name,
+                    "blue_badge": blue_badge,
+                    "device_type": device_type,
+                    "description": description,
+                    "department": department,
+                    "room_number": room_number,
+                    "notes": notes,
+                    "date_added": date_added
+                })  # Store the errored asset details to errored assets list, allowing this to be called later. 
 
+        print(f"Total Assets Imported: {len(self.assets)}")     # Upon showing the Menu, shows how successful the improt was. 
+        print(f"Errors Encountered: {len(self.errors)}")
+    
+    def validate_asset_data(self, name, blue_badge, device_type, description, department, room_number, notes, date_added):
+        valid = True
+        if len(name) < constraits.min_char_length:
+            self.errors.append(f"Asset {blue_badge} - Asset Name too short, must be at least 3 characters long.")
+            valid = False
+        if len(blue_badge) != constraits.blue_badge_length or not blue_badge.isdigit():
+            self.errors.append(f"Asset {blue_badge} - Blue Badge Number must be exactly 6 digits long and numerical.")
+            valid = False
+        if device_type not in ["Workstation", "Laptop", "Mobile", "Periferal"]:
+            self.errors.append(f"Asset {blue_badge} - Invalid asset type.")
+            valid = False
+        if len(description) < constraits.min_char_length:
+            self.errors.append(f"Asset {blue_badge} - Asset description too short, must be at least 3 characters long.")
+            valid = False
+        if len(department) < constraits.min_char_length:
+            self.errors.append(f"Asset {blue_badge} - Asset department too short, must be at least 3 characters long.")
+            valid = False
+        if len(room_number) > constraits.max_char_room_length:
+            self.errors.append(f"Asset {blue_badge} - Asset room number too long, must be below 5 characters long.")
+            valid = False
+        if len(date_added) != 10:
+            self.errors.append(f"Asset {blue_badge} - Date Added has an invalid format.")
+            valid = False
+        return valid  
+                    
     # Add Asset to the Asset register.
     def add_asset(self):
         util.clear()
@@ -568,6 +580,19 @@ class asset_register:
             input("Press Enter to continue...")
             util.clear()
 
+    def display_errors(self):
+            util.clear()
+            if not self.errors:
+                print("No errors found.")
+            else:
+                print("------------------------")
+                print("Validation Errors - Please correct errors in input file for the following assets:")
+                for error in self.errors:
+                    print(error)
+                print("------------------------")
+            input("Press Enter to continue...")
+            util.clear()
+
     # Search assets and return a specific asset based on the name or blue badge number. 
     def search_assets(self):
         util.clear()
@@ -662,7 +687,8 @@ def main():
         print("3. Update Asset")
         print("4. Display Assets")
         print("5. Search Assets")
-        print("6. Save & Exit")
+        print("6. Display Errors")
+        print("7. Save & Exit")
         print("------------------------")
         choice = input("Enter your choice: ")
         if choice =="":
@@ -678,6 +704,8 @@ def main():
         elif choice == "5":
             reg.search_assets()
         elif choice == "6":
+            reg.display_errors()
+        elif choice == "7":
             util.clear()
             print("Successfully exited")
             break
