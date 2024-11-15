@@ -565,7 +565,7 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="ke13yG8VGX8CHg303tFW-166" value="Exit" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#ff0000;" vertex="1" parent="1">
+        <mxCell id="ke13yG8VGX8CHg303tFW-166" value="&lt;font color=&quot;#ffffff&quot;&gt;Exit&lt;/font&gt;" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#ff0000;" vertex="1" parent="1">
           <mxGeometry x="555" y="1176" width="30" height="30" as="geometry" />
         </mxCell>
         <mxCell id="ke13yG8VGX8CHg303tFW-175" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="ke13yG8VGX8CHg303tFW-101" target="ke13yG8VGX8CHg303tFW-101">
