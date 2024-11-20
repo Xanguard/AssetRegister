@@ -243,6 +243,7 @@ def test_update_asset_validation(asset_reg):
         asset_reg.update_asset()
 
     # No asset to update. 
+
 def test_update_asset_no_assets(asset_reg):
     asset_reg.assets.clear() 
     

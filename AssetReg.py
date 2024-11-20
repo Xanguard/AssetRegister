@@ -121,16 +121,17 @@ class asset:
 # Asset Register import and functions.
 class asset_manager:  
     def __init__(self):
-        self.hardcoded_assets = [   ("Optiplex 5040", "00118", "Workstation", "Desktop PC", "Chemistry", "56", "", "05/11/2024"),
+        # Hardcoded Assets imported upon initialising the application. 
+        self.hardcoded_assets = [   ("Optiplex 5040", "009118", "Workstation", "Desktop PC", "Chemistry", "56", "", "05/11/2024"),
                                     ("Thinkcentre M715q", "012735", "Workstation", "Desktop PC", "Path IT", "3", "In Repair", "05/11/2024"),
                                     ("Optiplex 7020", "013311", "Workstation", "Desktop PC", "Path IT", "38", "", "01/11/2024"),
-                                    ("Thinkcentre 24\" Screen", "017963", "Periferal", "Desktop Screen", "Transfusion", "16", "", "07/1/2024"),
+                                    ("Thinkcentre 24\" Screen", "017963", "Periferal", "Desktop Screen", "Transfusion", "16", "", "07/10/2024"),
                                     ("Dell Precision 3450", "027631", "Workstation", "Digital Pathology PC", "Histology", "53", "Sectra Software installed", "11/11/2024"),
                                     ("Phillips Speechmike 4", "005623", "Periferal", "Digital Pathology Speechmike", "Histology", "53", "", "12/11/2024"),
                                     ("Barco MDPC-8127", "028770", "Periferal", "Digital Pathology Screen", "Histology", "53", "Barco Graphics Card Required", "11/11/2024"),
                                     ("Toshiba Dynabook Satellite Pro", "014312", "Laptop", "Technical Head Laptop", "Biochemistry", "25", "", "01/11/2024"),
                                     ("Thinkpad L15 Gen 1", "009852", "Laptop", "Projector Laptop", "Path IT", "38", "Laptop to be kept with projector", "09/09/2024"),
-                                    ("Lenovo ThinkPad L580", "008793", "Laptop", "Anticoagulation Laptop", "Haematology", "16666", "VPN Needed for Clinics", "01/06/2024"),
+                                    ("Lenovo ThinkPad L580", "008793", "Laptop", "Anticoagulation Laptop", "Haematology", "16", "VPN Needed for Clinics", "01/06/2024"),
                                 ]
         self.assets = []    # List of generated assets.
         self.errors = []    # List to collect interium error messages.
@@ -140,6 +141,7 @@ class asset_manager:
             if self.validate_asset_data(name, blue_badge, device_type, description, department, room_number, notes, date_added):
                 amend_asset = asset(name, blue_badge, device_type, description, department, room_number, notes, date_added)
                 self.assets.append(amend_asset)
+            # If the asset passes all validation, then add to the self.assets list.
             else:
                 amend_asset = asset(name, blue_badge, device_type, description, department, room_number, notes, date_added)
                 self.errored_assets.append(amend_asset)
@@ -147,6 +149,7 @@ class asset_manager:
     
         util.clear()
 
+    # Validation on import. 
     def validate_asset_data(self, name, blue_badge, device_type, description, department, room_number, notes, date_added):
         valid = True
         if len(name) < constraits.min_char_length:
@@ -179,6 +182,7 @@ class asset_register:
         self.errors = self.asset_manager.errors  # Use the errors from asset_manager
         self.errored_assets = self.asset_manager.errored_assets  # Use the errored assets from asset_manager
 
+        # Upon launch, display all successfully imported assets and all errored assets. 
         util.clear()
         blue_badge_numbers = [asset.blue_badge for asset in self.assets]
         print(f"Total Assets Imported: {len(self.assets)}")
@@ -199,6 +203,8 @@ class asset_register:
         util.clear()
         msg.caret_exit()
         print("Add Asset Function")
+        
+        #Specify Asset Name
         while True:
             name = input("Enter asset name: ")
             if name == "^":
@@ -208,6 +214,7 @@ class asset_register:
                 msg.print_asset_name_length_error()
             else:
                 break    
+        #Specify Asset Blue Badge Number
         while True:
             blue_badge = input("Enter asset blue badge number: ")
             primary_key_validate = [asset for asset in self.assets if asset.blue_badge == blue_badge]
@@ -222,6 +229,8 @@ class asset_register:
                 break
             else:
                 msg.print_blue_badge_duplicate_error()
+        
+        # Choose Asset Type
         while True:
             print("Select asset type:")
             print("1. Workstation")
@@ -246,6 +255,8 @@ class asset_register:
                 break
             else:
                 msg.print_asset_invalid_choice_error()        
+        
+        # Specify Asset Description
         while True:
             description = input("Enter asset description: ")
             if description == "^":
@@ -255,6 +266,8 @@ class asset_register:
                 msg.print_description_length_error()
             else:
                 break
+        
+        # Specify Asset Department
         while True:
             department = input("Enter asset department: ")
             if department == "^":
@@ -264,6 +277,8 @@ class asset_register:
                 msg.print_department_length_error()
             else:
                 break
+        
+        # Specify Asset Room
         while True:
             room_number = input("Enter asset room number: ")
             if room_number == "^":
@@ -273,6 +288,8 @@ class asset_register:
                 msg.print_room_length_error()
             else:
                 break
+        
+        # Specify Asset Notes (Optional)
         while True:
             notes = input("Enter any additional information: ")
             if notes == "^":
@@ -280,6 +297,8 @@ class asset_register:
                 return
             else:
                 break
+
+        # Add asset to the self.assets list. 
         amend_asset = asset(name, blue_badge, device_type, description, department, room_number, notes, util.formatted_date)
         self.assets.append(amend_asset)
         print("------------------------")
